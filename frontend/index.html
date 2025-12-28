@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SılaGpt 💖</title>
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SılaGpt">
+
+<style>
+
+
+:root {
+    --bg: #ece5dd;
+    --chat-bg: #fff;
+    --header: #075e54;
+    --user: #dcf8c6;
+    --bot: #ffffff;
+    --text: #000;
+}
+
+.dark {
+    --bg: #121212;
+    --chat-bg: #1e1e1e;
+    --header: #1f7a6b;
+    --user: #056162;
+    --bot: #2a2a2a;
+    --text: #eee;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: var(--text);
+}
+
+.chat {
+    width: 420px;
+    height: 90vh;
+    background: var(--chat-bg);
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+}
+
+.header {
+    background: var(--header);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.message {
+    max-width: 75%;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    animation: fade .2s ease;
+    white-space: pre-wrap;
+}
+
+.user {
+    background: var(--user);
+    margin-left: auto;
+    border-bottom-right-radius: 0;
+}
+
+.bot {
+    background: var(--bot);
+    margin-right: auto;
+    border-bottom-left-radius: 0;
+}
+
+.typing {
+    font-style: italic;
+    opacity: .7;
+}
+
+.input {
+    display: flex;
+    padding: 10px;
+    background: #f0f0f0;
+}
+
+.dark .input {
+    background: #222;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+}
+
+button {
+    margin-left: 8px;
+    border-radius: 20px;
+    border: none;
+    padding: 0 16px;
+    cursor: pointer;
+    background: var(--header);
+    color: white;
+}
+
+@keyframes fade {
+    from {opacity:0; transform: translateY(5px);}
+    to {opacity:1;}
+}
+</style>
+</head>
+
+<body>
+<div class="chat" id="chat">
+    <div class="header">
+        💖 SılaGpt
+        <button onclick="toggleTheme()">🌙</button>
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="input">
+        <input id="input" placeholder="Sıla’ya yaz 💬">
+        <button onclick="send()">Gönder</button>
+    </div>
+</div>
+
+<script>
+const messages = document.getElementById("messages");
+const input = document.getElementById("input");
+const chat = document.getElementById("chat");
+
+function addMessage(text, cls) {
+    const div = document.createElement("div");
+    div.className = "message " + cls;
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+}
+
+function toggleTheme() {
+    chat.classList.toggle("dark");
+}
+
+async function send() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    const typing = addMessage("💖 Sıla yazıyor...", "bot typing");
+
+    const res = await fetch("http://127.0.0.1:8000/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: text})
+    });
+
+    const data = await res.json();
+    typing.remove();
+
+    let reply = data.reply;
+    if (!reply.includes("💖")) reply += " 💖";
+
+    addMessage(reply, "bot");
+}
+
+input.addEventListener("keypress", e => {
+    if (e.key === "Enter") send();
+});
+</script>
+</body>
+</html>

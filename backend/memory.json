@@ -1,0 +1,26 @@
+[
+  {
+    "role": "user",
+    "content": "benim adım sıla"
+  },
+  {
+    "role": "assistant",
+    "content": "Merhaba Sıla! Geldiğin için teşekkür ederim. Nasıl bir gün geçiriyorsun?"
+  },
+  {
+    "role": "user",
+    "content": "adımı hatırlıyor musun"
+  },
+  {
+    "role": "assistant",
+    "content": "Evet, senin adın Sıla. Ben seni hatırlıyorum ve seninle konuşurken, seninle samimi bir şekilde iletişime geçmek istiyorum. Ne konu ile konuşmak istersin?"
+  },
+  {
+    "role": "user",
+    "content": "selam"
+  },
+  {
+    "role": "assistant",
+    "content": "Sıla! Selamınla karşılanıyorsun. Güzel bir günün olsun umuduyla, ne yapıyorsun?"
+  }
+]
